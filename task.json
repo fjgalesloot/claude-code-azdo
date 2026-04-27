@@ -200,12 +200,12 @@
       "helpMarkDown": "Inject SQL review standards (query correctness, schema design, migration safety). Reads modified .sql files."
     },
     {
-      "name": "reviewer_apex",
+      "name": "reviewer_salesforce",
       "type": "boolean",
-      "label": "Apex & Lightning Web Components Review (.cls, .trigger, .html, .js)",
+      "label": "Salesforce Review — Apex & LWC (.cls, .trigger, .html, .js)",
       "required": false,
       "defaultValue": false,
-      "helpMarkDown": "Inject Salesforce Apex and LWC review standards (governor limits, trigger patterns, security, FLS, LWC component design and accessibility). Reads modified .cls, .trigger, .html, and .js files."
+      "helpMarkDown": "Inject Salesforce Apex and LWC review standards (governor limits, trigger patterns, security, FLS, LWC component design, accessibility, and test coverage checks). Reads modified .cls, .trigger, .html, and .js files."
     },
     {
       "name": "reviewer_typescript",

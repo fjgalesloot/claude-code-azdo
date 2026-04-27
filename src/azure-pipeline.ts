@@ -173,8 +173,8 @@ async function run(): Promise<void> {
       enabledReviewers.push("python");
     if (tl.getBoolInput("reviewer_rust", false)) enabledReviewers.push("rust");
     if (tl.getBoolInput("reviewer_sql", false)) enabledReviewers.push("sql");
-    if (tl.getBoolInput("reviewer_apex", false))
-      enabledReviewers.push("apex");
+    if (tl.getBoolInput("reviewer_salesforce", false))
+      enabledReviewers.push("salesforce");
     if (tl.getBoolInput("reviewer_typescript", false))
       enabledReviewers.push("typescript");
     const reviewerSystemPrompt = buildReviewerSystemPrompt(enabledReviewers);
