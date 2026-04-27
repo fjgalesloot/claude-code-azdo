@@ -765,14 +765,6 @@ APEX — ERROR HANDLING:
 - Custom exceptions must extend Exception and carry enough context to identify the failing record or operation
 - Use System.assert* only in test classes — never in production code
 
-APEX — TEST COVERAGE:
-- Every non-test Apex class (.cls) or trigger (.trigger) added or modified in this PR must have a corresponding test class in the diff — if MyClass.cls changed, MyClassTest.cls or MyClass_Test.cls must also appear; flag any production class that lacks a matching test class change as a WARNING
-- Test classes must use @IsTest and call Test.startTest() / Test.stopTest() around the unit under test to reset governor limits
-- Tests must assert specific outcomes (values, record counts, exception types) — System.assert(true) and System.assert(result != null) are not meaningful assertions
-- Test data must be created inside the test method or a @TestSetup method — never rely on org data (no SeeAllData=true)
-- Bulk tests must supply at least 200 records to verify bulkification
-- Test methods must cover both the happy path and key failure/exception paths (e.g. DML errors, missing required fields, sharing violations)
-
 LWC — COMPONENT DESIGN:
 - Data fetching must use @wire with Apex @AuraEnabled(cacheable=true) methods or Lightning Data Service (getRecord, getRelatedListRecords) — avoid imperative Apex calls in connectedCallback for data that can be cached
 - Imperative Apex calls (non-cacheable) must handle both the result path and the error path (try/catch or .catch())
@@ -793,13 +785,6 @@ LWC — ACCESSIBILITY:
 - Interactive elements (buttons, links, custom controls) must have an accessible label (aria-label or aria-labelledby)
 - Form inputs must be associated with a label element or aria-labelledby
 - Keyboard navigation must be supported: custom clickable elements need keydown handlers for Enter and Space
-
-LWC — TEST COVERAGE:
-- Every LWC component added or modified in this PR must have a corresponding Jest test file in the diff — if myComponent/myComponent.html or myComponent/myComponent.js changed, myComponent/__tests__/myComponent.test.js (or .spec.js) must also appear; flag any component lacking a matching test file change as a WARNING
-- Jest tests must use @salesforce/sfdx-lwc-jest and mock all Apex wire adapters and imperative imports with jest.mock()
-- Tests must cover: initial render, user interaction events (click, change), wire data and wire error paths, and @api property changes
-- Use createElement from lwc and call document.body.appendChild/removeChild around each test to avoid component state leaking between tests
-- Assert on rendered DOM via shadowRoot.querySelector — do not assert on internal component state directly
 
 Output format:
 
