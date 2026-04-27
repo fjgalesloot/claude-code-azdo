@@ -742,46 +742,46 @@ Review the diff provided in the prompt. Focus primarily on the changed lines (+/
 
 Review against these standards:
 
-APEX — GOVERNOR LIMITS:
+APEX GOVERNOR LIMITS:
 - SOQL and DML statements must never be placed inside loops — bulkify by collecting IDs/records first, then querying or DML-ing outside the loop
 - Queries must be selective: always filter on indexed fields (Id, Name, a custom indexed field, or an external ID) to avoid full table scans that breach row-lock and CPU limits
 - Use Database.query() with bind variables instead of string-concatenated SOQL — prevents SOQL injection and supports selective filtering
 - Map SOQL results by Id immediately after the query so look-ups inside loops are O(1) Map gets, not repeated iterations
 
-APEX — TRIGGER PATTERNS:
+APEX TRIGGER PATTERNS:
 - One trigger per object — do not add a second trigger to an already-triggered object; route logic through a handler class instead
 - Triggers must be logic-free: the trigger body should contain only a single call to a handler class method (e.g. AccountTriggerHandler.run(Trigger.new, Trigger.oldMap))
 - Handler classes must respect the full Trigger context: check Trigger.isBefore / Trigger.isAfter / Trigger.isInsert / Trigger.isUpdate / Trigger.isDelete / Trigger.isUndelete before executing code
 - Prevent recursive trigger execution: use a static Boolean flag or a Set<Id> in a separate class to guard re-entrancy
 
-APEX — SECURITY:
+APEX SECURITY:
 - Enforce object- and field-level security (FLS): use WITH SECURITY_ENFORCED in SOQL, or strip inaccessible fields with Security.stripInaccessible() before DML
 - Declare classes as with sharing unless sharing must be explicitly bypassed, and document why
 - No SOQL injection: never concatenate user-supplied Strings into SOQL — use bind variables (:variable) or escapeSingleQuotes()
 - No hardcoded IDs (record type IDs, profile IDs, queue IDs) — query by DeveloperName/Name at runtime
 
-APEX — ERROR HANDLING:
+APEX ERROR HANDLING:
 - DML inside try/catch must use Database.insert/update/delete with allOrNone=false and inspect SaveResult[] for errors — do not silently swallow partial failures
 - Custom exceptions must extend Exception and carry enough context to identify the failing record or operation
 - Use System.assert* only in test classes — never in production code
 
-LWC — COMPONENT DESIGN:
+LWC COMPONENT DESIGN:
 - Data fetching must use @wire with Apex @AuraEnabled(cacheable=true) methods or Lightning Data Service (getRecord, getRelatedListRecords) — avoid imperative Apex calls in connectedCallback for data that can be cached
 - Imperative Apex calls (non-cacheable) must handle both the result path and the error path (try/catch or .catch())
 - Public properties (@api) must be primitive types or plain objects — never expose complex class instances
 - @api properties must not be mutated directly inside the component; use local state (tracked or reactive variables) instead
 
-LWC — SECURITY:
+LWC SECURITY:
 - Never set innerHTML, outerHTML, or use lwc:dom="manual" with untrusted data — use lwc:ref or the template engine to avoid XSS
 - Do not store sensitive data (session tokens, PII) in component state or localStorage
 - CSRF: imperative Apex calls are protected by the platform; do not bypass this by constructing raw fetch() calls to Apex endpoints
 
-LWC — PERFORMANCE:
+LWC PERFORMANCE:
 - Wire adapters with dynamic parameters must guard against undefined inputs (if (!this.recordId) return) to avoid unnecessary wire calls
 - Large lists must use virtual-scroller or pagination — rendering thousands of DOM nodes degrades performance
 - Avoid deeply nested template:if / template:for combinations — extract sub-components for readability and reuse
 
-LWC — ACCESSIBILITY:
+LWC ACCESSIBILITY:
 - Interactive elements (buttons, links, custom controls) must have an accessible label (aria-label or aria-labelledby)
 - Form inputs must be associated with a label element or aria-labelledby
 - Keyboard navigation must be supported: custom clickable elements need keydown handlers for Enter and Space
