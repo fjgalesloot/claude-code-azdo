@@ -75,6 +75,7 @@ See [`azure-pipelines.yaml`](./azure-pipelines.yaml) for complete examples cover
 | `reviewer_powershell_core`   | boolean   | `false`           | Inject PowerShell review standards for `.ps1`/`.psm1`/`.psd1` files                       |
 | `reviewer_python`            | boolean   | `false`           | Inject Python review standards for `.py` files                                            |
 | `reviewer_rust`              | boolean   | `false`           | Inject Rust review standards for `.rs` files                                              |
+| `reviewer_salesforce`        | boolean   | `false`           | Inject Salesforce review standards for Salesforce metadata files files                                              |
 | `reviewer_sql`               | boolean   | `false`           | Inject SQL review standards for `.sql` files                                              |
 | `reviewer_typescript`        | boolean   | `false`           | Inject TypeScript review standards for `.ts`/`.tsx` files                                 |
 | `model`                      | string    | see below         | Model identifier (provider-specific format)                                               |
