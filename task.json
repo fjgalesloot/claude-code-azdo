@@ -202,10 +202,10 @@
     {
       "name": "reviewer_salesforce",
       "type": "boolean",
-      "label": "Salesforce Review — Apex & LWC (.cls, .trigger, .html, .js)",
+      "label": "Salesforce Review — Apex & LWC (.cls, .trigger, .html, .js, .xml)",
       "required": false,
       "defaultValue": false,
-      "helpMarkDown": "Inject Salesforce Apex and LWC review standards (governor limits, trigger patterns, security, FLS, LWC component design, accessibility, and test coverage checks). Reads modified .cls, .trigger, .html, and .js files."
+      "helpMarkDown": "Inject Salesforce Apex and LWC review standards (governor limits, trigger patterns, security, FLS, LWC component design, accessibility, and custom field deployment coverage). Reads modified .cls, .trigger, .html, .js, and .xml files."
     },
     {
       "name": "reviewer_typescript",

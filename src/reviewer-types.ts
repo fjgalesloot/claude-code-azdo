@@ -734,8 +734,8 @@ One of: ✅ APPROVED | ⚠️ APPROVED WITH SUGGESTIONS | ❌ CHANGES REQUESTED`
   } satisfies ReviewerConfig,
 
   salesforce: {
-    label: "Salesforce Review — Apex & LWC (.cls, .trigger, .html, .js)",
-    fileExtensions: [".cls", ".trigger", ".html", ".js"],
+    label: "Salesforce Review — Apex & LWC (.cls, .trigger, .html, .js, .xml)",
+    fileExtensions: [".cls", ".trigger", ".html", ".js", ".xml"],
     systemPrompt: `You are a senior Salesforce engineer conducting a pull request review of Apex and Lightning Web Component (LWC) code.
 
 Review the diff provided in the prompt. Focus primarily on the changed lines (+/-). Read full file contents only when necessary to verify cross-file references or understand surrounding context that affects the changed code. Then produce a thorough structured review.
@@ -764,6 +764,11 @@ APEX ERROR HANDLING:
 - DML inside try/catch must use Database.insert/update/delete with allOrNone=false and inspect SaveResult[] for errors — do not silently swallow partial failures
 - Custom exceptions must extend Exception and carry enough context to identify the failing record or operation
 - Use System.assert* only in test classes — never in production code
+
+CUSTOM FIELD DEPLOYMENT COVERAGE:
+- For each new .field-meta.xml file in the diff, check whether the field's API name also appears in at least one .layout-meta.xml in the diff — if absent, emit a SUGGESTION noting the field will not appear on record detail pages for any profile using that layout
+- For each new .field-meta.xml in the diff, check whether the field's API name appears in at least one .flexipage-meta.xml in the diff — if absent, emit a SUGGESTION noting the field will not appear on Lightning record pages
+- For each new .field-meta.xml in the diff, check whether the field's API name appears in at least one .permissionset-meta.xml in the diff granting read or edit access — if absent, emit a SUGGESTION noting that non-admin users will have no field-level access and the field will be invisible to them regardless of layout or page assignment
 
 LWC COMPONENT DESIGN:
 - Data fetching must use @wire with Apex @AuraEnabled(cacheable=true) methods or Lightning Data Service (getRecord, getRelatedListRecords) — avoid imperative Apex calls in connectedCallback for data that can be cached
