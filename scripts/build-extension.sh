@@ -166,10 +166,11 @@ else
     exit 1
 fi
 
-# Copy task.json to dist
+# Copy task.json to dist and inject version from vss-extension.json
 log_step "Copying task.json to dist..."
 cp task.json dist/
-log_success "task.json copied"
+node -e "const fs=require('fs');const t=JSON.parse(fs.readFileSync('dist/task.json'));const v=require('./vss-extension.json').version.split('.');t.version={Major:+v[0],Minor:+v[1],Patch:+v[2]};fs.writeFileSync('dist/task.json',JSON.stringify(t,null,2))"
+log_success "task.json copied and version injected from vss-extension.json"
 
 # Copy additional required files
 log_step "Copying additional files..."

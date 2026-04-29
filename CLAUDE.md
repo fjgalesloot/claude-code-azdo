@@ -135,7 +135,7 @@ Custom environment variables are passed as `KEY: VALUE` per line (colon-separate
 `src/reviewer-types.ts` defines the pluggable reviewer framework.
 
 - `ReviewerConfig` interface — `label`, `fileExtensions`, `systemPrompt`
-- `REVIEWER_CONFIGS` — keyed map of 16 reviewers: `terraform`, `yaml`, `helm`, `cilium`, `dockerfile`, `dotnet_core`, `golang`, `java`, `javascript`, `nextjs`, `php`, `powershell_core`, `python`, `rust`, `sql`, `typescript`
+- `REVIEWER_CONFIGS` — keyed map of 17 reviewers: `terraform`, `yaml`, `helm`, `cilium`, `dockerfile`, `dotnet_core`, `golang`, `java`, `javascript`, `nextjs`, `php`, `powershell_core`, `python`, `rust`, `sql`, `salesforce`, `typescript`
 - `ReviewerTypeKey` — `keyof typeof REVIEWER_CONFIGS`
 - `buildReviewerSystemPrompt(enabledTypes)` — concatenates `systemPrompt` strings for all enabled types, separated by `\n\n`; returns `""` when empty
 

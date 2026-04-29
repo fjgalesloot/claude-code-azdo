@@ -50,16 +50,9 @@ fi
 echo "🔍 Checking version consistency..."
 PACKAGE_VERSION=$(node -p "require('./package.json').version")
 VSS_VERSION=$(node -p "require('./vss-extension.json').version")
-TASK_VERSION=$(node -p "const task = require('./task.json'); \`\${task.version.Major}.\${task.version.Minor}.\${task.version.Patch}\`")
 
 echo "Package.json: $PACKAGE_VERSION"
 echo "vss-extension.json: $VSS_VERSION"
-echo "task.json: $TASK_VERSION"
-
-if [ "$VSS_VERSION" != "$TASK_VERSION" ]; then
-    echo "❌ Version mismatch between vss-extension.json and task.json"
-    exit 1
-fi
 
 echo "✅ Version consistency check passed"
 
@@ -88,7 +81,9 @@ pnpm run validate:build
 echo "📦 Creating VSIX package..."
 pnpm run create:vsix
 
-VSIX_FILE="listellm.claude-code-base-task-$VSS_VERSION.vsix"
+PUBLISHER=$(node -p "require('./vss-extension.json').publisher")
+EXTENSION_ID=$(node -p "require('./vss-extension.json').id")
+VSIX_FILE="$PUBLISHER.$EXTENSION_ID-$VSS_VERSION.vsix"
 
 if [ ! -f "$VSIX_FILE" ]; then
     echo "❌ VSIX file not created: $VSIX_FILE"
@@ -125,7 +120,7 @@ echo "$AZURE_DEVOPS_EXT_PAT" | tfx extension publish --vsix "$VSIX_FILE" --token
 
 echo "✅ Extension published successfully!"
 echo ""
-echo "🌐 View at: https://marketplace.visualstudio.com/items?itemName=listellm.claude-code-base-task"
+echo "🌐 View at: https://marketplace.visualstudio.com/items?itemName=$PUBLISHER.$EXTENSION_ID"
 echo ""
 echo "📋 Summary:"
 echo "  - Version: $VSS_VERSION"
