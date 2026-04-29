@@ -123,7 +123,6 @@ if [ "$DRY_RUN" = false ]; then
     log_step "Creating backups..."
     cp package.json package.json.bak
     cp vss-extension.json vss-extension.json.bak
-    cp task.json task.json.bak
 fi
 
 # Update package.json
@@ -147,19 +146,11 @@ if [ "$AUTO_AZURE" = true ]; then
     if [ "$DRY_RUN" = false ]; then
         # Update vss-extension.json
         sed -i.tmp "s/\"version\": \"[^\"]*\"/\"version\": \"$ACTUAL_NEW_VERSION\"/" vss-extension.json
-
-        # Update task.json
-        sed -i.tmp "s/\"Major\": [0-9]*/\"Major\": $MAJOR/" task.json
-        sed -i.tmp "s/\"Minor\": [0-9]*/\"Minor\": $MINOR/" task.json
-        sed -i.tmp "s/\"Patch\": [0-9]*/\"Patch\": $PATCH/" task.json
-
-        # Clean up temporary files
-        rm -f vss-extension.json.tmp task.json.tmp
+        rm -f vss-extension.json.tmp
 
         log_success "Updated Azure extension to $ACTUAL_NEW_VERSION"
     else
         log_info "Would update vss-extension.json to $ACTUAL_NEW_VERSION"
-        log_info "Would update task.json to Major: $MAJOR, Minor: $MINOR, Patch: $PATCH"
     fi
 fi
 
@@ -169,27 +160,12 @@ if [ "$DRY_RUN" = false ]; then
 
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     VSS_VERSION=$(node -p "require('./vss-extension.json').version")
-    TASK_VERSION=$(node -p "const task = require('./task.json'); \`\${task.version.Major}.\${task.version.Minor}.\${task.version.Patch}\`")
 
     log_info "Package version: $PACKAGE_VERSION"
     log_info "VSS extension version: $VSS_VERSION"
-    log_info "Task version: $TASK_VERSION"
-
-    if [ "$AUTO_AZURE" = true ]; then
-        if [ "$VSS_VERSION" != "$TASK_VERSION" ]; then
-            log_error "Version mismatch between vss-extension.json and task.json"
-
-            # Restore from backups
-            mv package.json.bak package.json
-            mv vss-extension.json.bak vss-extension.json
-            mv task.json.bak task.json
-
-            exit 1
-        fi
-    fi
 
     # Clean up backup files
-    rm -f package.json.bak vss-extension.json.bak task.json.bak
+    rm -f package.json.bak vss-extension.json.bak
 
     log_success "Version consistency validated"
 fi

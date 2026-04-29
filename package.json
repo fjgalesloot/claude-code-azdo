@@ -1,6 +1,6 @@
 {
   "name": "@anthropic-ai/claude-code-base-azure-task",
-  "version": "3.11.0",
+  "version": "3.11.5",
   "private": true,
   "engines": {
     "node": ">=22.0.0"
@@ -18,7 +18,7 @@
     "build:clean": "./scripts/build-extension.sh --clean",
     "build:fast": "./scripts/build-extension.sh --skip-tests --skip-lint",
     "build:azure": "esbuild src/azure-pipeline.ts --bundle --platform=node --target=node22 --format=cjs --outfile=dist/azure-pipeline.js --external:azure-pipelines-task-lib",
-    "package:azure": "pnpm run build:azure && cp task.json dist/ && cd dist && echo '{}' > package.json && npm install azure-pipelines-task-lib --omit=dev --no-package-lock && rm package.json",
+    "package:azure": "pnpm run build:azure && cp task.json dist/ && node -e \"const fs=require('fs');const t=JSON.parse(fs.readFileSync('dist/task.json'));const v=require('./vss-extension.json').version.split('.');t.version={Major:+v[0],Minor:+v[1],Patch:+v[2]};fs.writeFileSync('dist/task.json',JSON.stringify(t,null,2))\" && cd dist && echo '{}' > package.json && npm install azure-pipelines-task-lib --omit=dev --no-package-lock && rm package.json",
     "clean": "rm -rf dist && rm -rf *.vsix && rm -rf output.txt",
     "prebuild": "pnpm run clean",
     "validate:build": "node scripts/validate-build.js",

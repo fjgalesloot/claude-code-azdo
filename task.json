@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-  "id": "912f59fc-c978-48da-8aeb-bc3b96ebc76d",
+  "id": "e01ec567-072f-4d6a-9f6c-e277c502ce87",
   "name": "ClaudeCodeBaseTask",
   "friendlyName": "Claude Code Base Task",
   "description": "Run Claude Code in Azure DevOps pipelines",
@@ -9,8 +9,8 @@
   "visibility": ["Build", "Release"],
   "author": "Anthropic",
   "version": {
-    "Major": 3,
-    "Minor": 11,
+    "Major": 0,
+    "Minor": 0,
     "Patch": 0
   },
   "minimumAgentVersion": "3.232.0",

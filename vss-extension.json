@@ -2,8 +2,8 @@
   "manifestVersion": 1,
   "id": "claude-code-base-task",
   "name": "Claude Code Base Task",
-  "version": "3.11.0",
-  "publisher": "listellm",
+  "version": "3.11.5",
+  "publisher": "VloeiendIT",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
@@ -47,11 +47,11 @@
   ],
   "repository": {
     "type": "git",
-    "uri": "https://github.com/listellm/claude-code-azdo"
+    "uri": "https://github.com/fjgalesloot/claude-code-azdo"
   },
   "branding": {
     "color": "orange",
     "theme": "light"
   },
-  "public": true
+  "public": false
 }

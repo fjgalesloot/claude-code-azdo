@@ -57,23 +57,19 @@ jobs:
           # Get current versions from files
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           VSS_VERSION=$(node -p "require('./vss-extension.json').version")
-          TASK_VERSION=$(node -p "const task = require('./task.json'); \`\${task.version.Major}.\${task.version.Minor}.\${task.version.Patch}\`")
+          PUBLISHER=$(node -p "require('./vss-extension.json').publisher")
+          EXTENSION_ID=$(node -p "require('./vss-extension.json').id")
 
           echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
           echo "vss_version=$VSS_VERSION" >> $GITHUB_OUTPUT
-          echo "task_version=$TASK_VERSION" >> $GITHUB_OUTPUT
+          echo "publisher=$PUBLISHER" >> $GITHUB_OUTPUT
+          echo "extension_id=$EXTENSION_ID" >> $GITHUB_OUTPUT
 
       - name: Version consistency check
         run: |
           echo "🔍 Checking version consistency..."
           echo "Package.json: ${{ steps.version.outputs.package_version }}"
           echo "vss-extension.json: ${{ steps.version.outputs.vss_version }}"
-          echo "task.json: ${{ steps.version.outputs.task_version }}"
-
-          if [ "${{ steps.version.outputs.vss_version }}" != "${{ steps.version.outputs.task_version }}" ]; then
-            echo "❌ Version mismatch between vss-extension.json and task.json"
-            exit 1
-          fi
 
           echo "✅ Version consistency check passed"
 
@@ -112,7 +108,7 @@ jobs:
           echo "📦 Creating VSIX package..."
           tfx extension create --manifest-globs vss-extension.json --output-path ./
 
-          VSIX_FILE="listellm.claude-code-base-task-${{ steps.version.outputs.vss_version }}.vsix"
+          VSIX_FILE="${{ steps.version.outputs.publisher }}.${{ steps.version.outputs.extension_id }}-${{ steps.version.outputs.vss_version }}.vsix"
 
           if [ ! -f "$VSIX_FILE" ]; then
             echo "❌ VSIX file not created: $VSIX_FILE"
@@ -145,7 +141,7 @@ jobs:
           tfx extension publish --vsix ${{ steps.package.outputs.vsix_file }} --token $AZURE_DEVOPS_EXT_PAT
 
           echo "✅ Extension published successfully!"
-          echo "🌐 View at: https://marketplace.visualstudio.com/items?itemName=listellm.claude-code-base-task"
+          echo "🌐 View at: https://marketplace.visualstudio.com/items?itemName=${{ steps.version.outputs.publisher }}.${{ steps.version.outputs.extension_id }}"
 
       - name: Create GitHub Release
         if: github.event.inputs.dry_run != 'true' && github.event_name == 'workflow_dispatch'
@@ -157,11 +153,11 @@ jobs:
             ## Azure DevOps Extension v${{ steps.version.outputs.vss_version }}
 
             ### 🚀 Installation
-            Install from the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=listellm.claude-code-base-task)
+            Install from the [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=${{ steps.version.outputs.publisher }}.${{ steps.version.outputs.extension_id }})
 
             ### 📦 Package Details
             - **Extension ID**: claude-code-base-task
-            - **Publisher**: listellm
+            - **Publisher**: ${{ steps.version.outputs.publisher }}
             - **Version**: ${{ steps.version.outputs.vss_version }}
 
             ### 🔧 Usage
@@ -193,7 +189,7 @@ jobs:
             echo "🔍 **Dry Run Completed** - Extension was built but not published" >> $GITHUB_STEP_SUMMARY
           else
             echo "🚀 **Published Successfully**" >> $GITHUB_STEP_SUMMARY
-            echo "- [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=listellm.claude-code-base-task)" >> $GITHUB_STEP_SUMMARY
+            echo "- [Azure DevOps Marketplace](https://marketplace.visualstudio.com/items?itemName=${{ steps.version.outputs.publisher }}.${{ steps.version.outputs.extension_id }})" >> $GITHUB_STEP_SUMMARY
             echo "- [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/azure-v${{ steps.version.outputs.vss_version }})" >> $GITHUB_STEP_SUMMARY
           fi
 
